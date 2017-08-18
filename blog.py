@@ -28,7 +28,7 @@ def login():
     error = None
     status_code = 200
     if request.method == 'POST':
-        if request.form['username'] != app.config['USERNAME'] or request.form['passowrd'] != app.config['PASSWORD']:
+        if request.form['username'] != app.config['USERNAME'] or request.form['password'] != app.config['PASSWORD']:
             error = 'Credenciales no válidas. Pruebe de nuevo.'
             status_code = 401
         else:
@@ -36,6 +36,13 @@ def login():
             return redirect(url_for('main'))
 
     return render_template('login.html', error=error), status_code
+
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    flash('You were logged out')
+    return redirect(url_for('login'))
 
 
 @app.route('/main')
